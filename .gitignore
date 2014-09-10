@@ -9,3 +9,6 @@
 
 # Other
 .idea/
+
+# Application files
+/src/config/database.php
