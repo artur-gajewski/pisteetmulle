@@ -51,3 +51,9 @@ blockquote cite {
 blockquote cite:before {
     content: "\2014 \2009";
 }
+
+.fb-like-box,
+.fb-like-box span,
+.fb-like-box span iframe[style] {
+    width: 100% !important;
+}
