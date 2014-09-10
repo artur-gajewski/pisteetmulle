@@ -7,7 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 $app = new Silex\Application();
 
-$app['debug'] = true;
+// Dev mode, not for production
+// $app['debug'] = true;
 
 // Database
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
@@ -51,42 +52,6 @@ $app->post('/', function (Request $request) use ($app)
     ));
 
     return $app->redirect('/' . $shortUrl);
-});
-
-// convert to database
-$app->get('/convert', function () use ($app)
-{
-    $files = scandir(__DIR__.'/../data');
-
-    foreach( $files as $fl) {
-
-        if ($fl != '.' && $fl != '..') {
-
-            $data = file_get_contents(__DIR__.'/../data/' . $fl);
-
-            $fl = str_replace('.txt', '', $fl);
-            $shortUrl = $fl;
-
-            $entry = $app['db']->fetchAssoc('SELECT * FROM entries WHERE shorturl = :shorturl', array(
-                'shorturl' => $shortUrl,
-            ));
-
-            if (!$entry) {
-
-                $row = explode('|', $data);
-
-                if (sizeof($row) == 3) {
-                    list($story, $author, $created) = explode('|', $data);
-
-                    $app['db']->insert('entries', array(
-                        'shorturl' => $shortUrl,
-                        'author'   => $author,
-                        'story'    => $story,
-                    ));
-                }
-            }
-        }
-    }
 });
 
 // View saved data
