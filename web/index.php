@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 $app = new Silex\Application();
 
 // Dev mode, not for production
-// $app['debug'] = true;
+$app['debug'] = true;
 
 // Database
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
@@ -64,6 +64,12 @@ $app->get('/{shortUrl}', function ($shortUrl) use ($app)
     if (!$entry) {
         return $app->redirect('/');
     }
+
+    $views = (int) $entry['views'] + 1;
+    $app['db']->executeUpdate('UPDATE entries SET views = :views WHERE shorturl = :shorturl', array(
+        'views'    => $views,
+        'shorturl' => $shortUrl
+    ));
 
     return $app['twig']->render('view.twig', array(
         'story'   => $entry['story'],

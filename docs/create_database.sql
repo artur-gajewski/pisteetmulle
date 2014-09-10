@@ -3,5 +3,6 @@ CREATE TABLE entries (
      shorturl VARCHAR(50),
      author VARCHAR(100),
      story VARCHAR(255),
-     created TIMESTAMP DEFAULT NOW()
+     created TIMESTAMP DEFAULT NOW(),
+     views INT DEFAULT 0
 );
