@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 $app = new Silex\Application();
 
 // Dev mode, not for production
-$app['debug'] = true;
+//$app['debug'] = true;
 
 // Database
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
