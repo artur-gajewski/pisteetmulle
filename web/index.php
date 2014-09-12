@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 $app = new Silex\Application();
 
 // Dev mode, not for production
-$app['debug'] = true;
+//$app['debug'] = true;
 
 // Database
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
@@ -65,7 +65,8 @@ $app->get('/uusimmat', function () use ($app)
     $entries = $app['db']->query('SELECT * FROM entries WHERE author != "" AND story != "" AND public = true ORDER BY created DESC LIMIT 20');
 
     return $app['twig']->render('list.twig', array(
-        'entries'    => $entries
+        'entries'    => $entries,
+        'page_title' => 'Uusimmat'
     ));
 })->bind('latest');
 
@@ -75,7 +76,8 @@ $app->get('/top', function () use ($app)
     $entries = $app['db']->query('SELECT * FROM entries WHERE author != "" AND story != "" AND public = true ORDER BY views DESC LIMIT 20');
 
     return $app['twig']->render('list.twig', array(
-        'entries'    => $entries
+        'entries'    => $entries,
+        'page_title' => 'TOP 20'
     ));
 })->bind('top');
 
@@ -97,9 +99,10 @@ $app->get('/{shortUrl}', function ($shortUrl) use ($app)
     ));
 
     return $app['twig']->render('view.twig', array(
-        'story'   => $entry['story'],
-        'author'  => $entry['author'],
-        'created' => $entry['created'],
+        'shortUrl'  => $entry['shorturl'],
+        'story'     => $entry['story'],
+        'author'    => $entry['author'],
+        'created'   => $entry['created'],
     ));
 })->bind('view');
 

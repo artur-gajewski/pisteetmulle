@@ -1,61 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Uusimmat | Pisteet Mulle</title>
+{% extends 'layout.twig' %}
 
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/glyphicons.min.css" rel="stylesheet">
-    <link href="css/main.css?version=1" rel="stylesheet">
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-</head>
-<body>
-
-<div class="container">
-    <div class="row">
-        <div class="pull-right nav-custom">
-            <a href="{{ app.url_generator.generate('homepage') }}">Luo uusi</a>
-            &nbsp;|&nbsp;
-            <a href="{{ app.url_generator.generate('latest') }}">Uusimmat</a>
-            &nbsp;|&nbsp;
-            <a href="{{ app.url_generator.generate('top') }}">TOP 20</a>
-        </div>
-    </div>
-
-    <div>
-        <ul>
-            {% for entry in entries %}
-                <div class="counter">{{ loop.index }}.</div>
-                <div class="quote-box">
-                    <div class="padding-20">
-                        <blockquote>
-                            {{ entry.story }}
-                            <cite>{{ entry.author }}, {{ entry.created|date('d.m.Y') }}</cite>
-                        </blockquote>
-                        <div class="opener">
-                            <a href="{{ app.url_generator.generate('view', {'shortUrl': entry.shorturl}) }}">Avaa »</a>
-                        </div>
-
+{% block content %}
+    <ul>
+        {% for entry in entries %}
+            <div class="counter">{{ loop.index }}.</div>
+            <div class="quote-box">
+                <div class="padding-20">
+                    <blockquote>
+                        {{ entry.story }}
+                        <cite>{{ entry.author }}, {{ entry.created|date('d.m.Y') }}</cite>
+                    </blockquote>
+                    <div class="opener">
+                        <a href="{{ app.url_generator.generate('view', {'shortUrl': entry.shorturl}) }}">Avaa »</a>
                     </div>
                 </div>
+            </div>
+        {% endfor %}
+    </ul>
+{% endblock %}
 
-            {% endfor %}
-        </ul>
-    </div>
-
-</div>
-
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-</body>
-</html>
+{% block title %}{{ page_title }} | {% endblock %}
