@@ -45,6 +45,7 @@ $app->post('/', function (Request $request) use ($app)
 {
     $story = $request->get('story');
     $author = $request->get('author');
+    $public = $request->get('public') ? 1 : 0;
 
     $shortUrl = base_convert(rand(100, 999) . microtime(true), 10, 36);
 
@@ -52,6 +53,7 @@ $app->post('/', function (Request $request) use ($app)
         'shorturl' => $shortUrl,
         'author'   => $author,
         'story'    => $story,
+        'public'   => $public,
     ));
 
     return $app->redirect('/' . $shortUrl);
@@ -60,7 +62,7 @@ $app->post('/', function (Request $request) use ($app)
 // Get list of latest entries
 $app->get('/uusimmat', function () use ($app)
 {
-    $entries = $app['db']->query('SELECT * FROM entries WHERE author != "" AND story != "" ORDER BY created DESC LIMIT 20');
+    $entries = $app['db']->query('SELECT * FROM entries WHERE author != "" AND story != "" AND public = true ORDER BY created DESC LIMIT 20');
 
     return $app['twig']->render('list.twig', array(
         'entries'    => $entries
@@ -70,7 +72,7 @@ $app->get('/uusimmat', function () use ($app)
 // Get list of TOP entries
 $app->get('/top', function () use ($app)
 {
-    $entries = $app['db']->query('SELECT * FROM entries WHERE author != "" AND story != "" ORDER BY views DESC LIMIT 20');
+    $entries = $app['db']->query('SELECT * FROM entries WHERE author != "" AND story != "" AND public = true ORDER BY views DESC LIMIT 20');
 
     return $app['twig']->render('list.twig', array(
         'entries'    => $entries
