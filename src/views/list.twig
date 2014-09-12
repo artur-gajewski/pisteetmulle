@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pisteet Mulle</title>
+    <title>Uusimmat | Pisteet Mulle</title>
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -21,33 +21,37 @@
 <body>
 
 <div class="container">
-
     <div class="row">
         <div class="pull-right nav-custom">
+            <a href="{{ app.url_generator.generate('homepage') }}">Luo uusi</a>
+            &nbsp;|&nbsp;
             <a href="{{ app.url_generator.generate('latest') }}">Uusimmat</a>
             &nbsp;|&nbsp;
             <a href="{{ app.url_generator.generate('top') }}">TOP 20</a>
         </div>
     </div>
 
-    <div class="col-xs-12 vcenter">
-        <br/>
-        <form method="POST" class="form-horizontal" role="form">
-            <div class="form-group form-group-lg">
-                <div class="col-sm-12">
-                    <input class="form-control short" type="text" name="story" id="story" value="" placeholder="Kerro meille mitä teit?">
+    <div>
+        <ul>
+            {% for entry in entries %}
+                <div class="counter">{{ loop.index }}.</div>
+                <div class="quote-box">
+                    <div class="padding-20">
+                        <blockquote>
+                            {{ entry.story }}
+                            <cite>{{ entry.author }}, {{ entry.created|date('d.m.Y') }}</cite>
+                        </blockquote>
+                        <div class="opener">
+                            <a href="{{ app.url_generator.generate('view', {'shortUrl': entry.shorturl}) }}">Avaa »</a>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
-            <div class="form-group form-group-lg">
-                <div class="col-sm-12">
-                    <input class="form-control" type="text" name="author" id="author" placeholder="Syötä vielä nimesi . . ." value="">
-                </div>
-            </div>
-            <div class="col-sm-12">
-                <button type="submit" class="btn btn-success">Tallenna</button>
-            </div>
-        </form>
+
+            {% endfor %}
+        </ul>
     </div>
+
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 $app = new Silex\Application();
 
 // Dev mode, not for production
-//$app['debug'] = true;
+$app['debug'] = true;
 
 // Database
 $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
@@ -19,6 +19,9 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../src/views',
 ));
+
+// URL generator
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
 // Truncate filter for Twig
 $app['twig']->addFilter(new Twig_SimpleFilter('truncate', function($string, $size)
@@ -35,7 +38,7 @@ $app->get('/', function () use ($app)
 {
     return $app['twig']->render('form.twig', array(
     ));
-});
+})->bind('homepage');
 
 // Save the form's data
 $app->post('/', function (Request $request) use ($app)
@@ -53,6 +56,26 @@ $app->post('/', function (Request $request) use ($app)
 
     return $app->redirect('/' . $shortUrl);
 });
+
+// Get list of latest entries
+$app->get('/uusimmat', function () use ($app)
+{
+    $entries = $app['db']->query('SELECT * FROM entries WHERE author != "" AND story != "" ORDER BY created DESC LIMIT 20');
+
+    return $app['twig']->render('list.twig', array(
+        'entries'    => $entries
+    ));
+})->bind('latest');
+
+// Get list of TOP entries
+$app->get('/top', function () use ($app)
+{
+    $entries = $app['db']->query('SELECT * FROM entries WHERE author != "" AND story != "" ORDER BY views DESC LIMIT 20');
+
+    return $app['twig']->render('list.twig', array(
+        'entries'    => $entries
+    ));
+})->bind('top');
 
 // View saved data
 $app->get('/{shortUrl}', function ($shortUrl) use ($app)
@@ -76,7 +99,7 @@ $app->get('/{shortUrl}', function ($shortUrl) use ($app)
         'author'  => $entry['author'],
         'created' => $entry['created'],
     ));
-});
+})->bind('view');
 
 $app->run();
 

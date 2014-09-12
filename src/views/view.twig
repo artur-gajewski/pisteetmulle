@@ -30,16 +30,26 @@
     }(document, 'script', 'facebook-jssdk'));</script>
 
 <div class="container">
-    <div style="background-color: #eee; -moz-border-radius: 15px; border-radius: 15px;">
+    <div class="row">
+        <div class="pull-right nav-custom">
+            <a href="{{ app.url_generator.generate('homepage') }}">Luo uusi</a>
+            &nbsp;|&nbsp;
+            <a href="{{ app.url_generator.generate('latest') }}">Uusimmat</a>
+            &nbsp;|&nbsp;
+            <a href="{{ app.url_generator.generate('top') }}">TOP 20</a>
+        </div>
+    </div>
 
-        <div style="padding: 20px">
+    <div class="quote-box">
+
+        <div class="padding-20">
             <blockquote>
                 {{ story }}
                 <cite>{{ author }}, {{ created|date('d.m.Y') }}</cite>
             </blockquote>
         </div>
 
-        <div class="col-xs-9 vcenter" style="margin: 20px">
+        <div class="col-xs-9 vcenter margin-20">
             <div class="fb-like" data-href="#" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
         </div>
 
